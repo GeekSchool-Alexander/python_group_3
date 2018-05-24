@@ -1,3 +1,5 @@
+import random
+
 PLAYER_ICON = ""
 BOT_ICON = ""
 
@@ -86,11 +88,31 @@ def get_legal_moves(board):
 def bot_move(board):
 	ways = get_legal_moves(board)
 	if ways:
+		cell = random.choice(ways)
+		board[cell] = BOT_ICON
+
+
+def player_move(board):
+	ways = get_legal_moves(board)
 	
+	def to_str(x):
+		return str(x)
 	
-	
-	
+	ways_s = map(to_str, ways)  # map(lambda x: str(x), ways)
+	print("Your possible ways: " + " ".join(ways_s))
+	while True:
+		cell = int(input("Your way: "))
+		if cell in ways:
+			board[cell] = PLAYER_ICON
+			break
 
 instruction()
 brd = init_board()
 choose_icon()
+brd[5] = BOT_ICON
+brd[7] = PLAYER_ICON
+dislay_board(brd)
+bot_move(brd)
+dislay_board(brd)
+player_move(brd)
+dislay_board(brd)
