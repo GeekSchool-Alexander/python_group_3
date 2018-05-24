@@ -1,3 +1,5 @@
+import random
+
 PLAYER_ICON = ""
 BOT_ICON = ""
 
@@ -55,15 +57,30 @@ def get_legal_moves(board):
 			ways.append(index)
 	return tuple(ways)
 
+
+def bot_move(board):
+	ways = get_legal_moves(board)
+	cell = random.choice(ways)
+	board[cell] = BOT_ICON
+
+
+def player_move(board):
+	ways = get_legal_moves(board)  # Список свободных клеток
+	# Вывод в консоль номеров свободных клеток
+	print("Свободные клетки: ", end = " ")
+	for way in ways:
+		print(way, end = " ")
+	# Выбор клетки для хода игроком
+	while True:
+		cell = int(input("\nВведите номер клетки для хода: "))
+		if cell in ways:  # Если клетка свободна
+			board[cell] = PLAYER_ICON  # Делаем ход в клетку
+			break
+		
 choose_icon()
 brd = init_board()
-brd[2] = "X"
-brd[4] = "X"
-brd[7] = "X"
 display_board(brd)
-print(winner(brd), player_is_winner(brd), bot_is_winner(brd))
-print(get_legal_moves(brd))
-brd[0] = "O"
-brd[6] = "O"
+bot_move(brd)
 display_board(brd)
-print(get_legal_moves(brd))
+bot_move(brd)
+display_board(brd)
