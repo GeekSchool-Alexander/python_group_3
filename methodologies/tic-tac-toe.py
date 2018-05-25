@@ -37,9 +37,9 @@ def choose_icon():
 def init_board():
 	board = [" " for i in range(9)]
 	return board
-	
 
-def dislay_board(board):
+
+def display_board(board):
 	for row in range(0,8,3):
 		print("-------")
 		for cell in range(3):
@@ -50,11 +50,7 @@ def dislay_board(board):
 
 
 def winner(board):
-	ways_to_win = ((0,1,2), (0,3,6), (0,4,8),
-	               (1,4,7),
-	               (2,4,6), (2,5,8),
-	               (3,4,5),
-	               (6,7,8))
+	ways_to_win = ((0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 3, 6), (1, 4, 7), (2, 5, 8), (0, 4, 8), (2, 4, 6))
 	for way in ways_to_win:
 		if board[way[0]] == board[way[1]] == board[way[2]]:
 			return board[way[0]]
@@ -68,16 +64,11 @@ def bot_is_winner(board):
 	return  winner(board) == BOT_ICON
 
 
-def is_tie(board):
-	ways = get_legal_moves(board)
-	if not ways:
-		if not player_is_winner(board) and not bot_is_winner(board):
-			return True
-	else:
-		return False
-		
+def tie(board):
+	return (not legal_moves(board)) and (not player_is_winner(board)) and (not bot_is_winner(board))
 
-def get_legal_moves(board):
+
+def legal_moves(board):
 	ways_to_move = []
 	for cell_index in range( len(board) ):
 		if board[cell_index] == " ":
@@ -86,14 +77,14 @@ def get_legal_moves(board):
 
 
 def bot_move(board):
-	ways = get_legal_moves(board)
+	ways = legal_moves(board)
 	if ways:
 		cell = random.choice(ways)
 		board[cell] = BOT_ICON
 
 
 def player_move(board):
-	ways = get_legal_moves(board)
+	ways = legal_moves(board)
 	
 	def to_str(x):
 		return str(x)
@@ -106,13 +97,55 @@ def player_move(board):
 			board[cell] = PLAYER_ICON
 			break
 
+
 instruction()
 brd = init_board()
 choose_icon()
-brd[5] = BOT_ICON
-brd[7] = PLAYER_ICON
-dislay_board(brd)
-bot_move(brd)
-dislay_board(brd)
-player_move(brd)
-dislay_board(brd)
+if PLAYER_ICON == "X":
+	while True:
+		# Ход Игрока
+		display_board(brd)
+		player_move(brd)
+		if player_is_winner(brd):
+			display_board(brd)
+			print("Ты выиграл!")
+			break
+		if tie(brd):
+			display_board(brd)
+			print("Ничья!")
+			break
+		# Ход бота
+		display_board(brd)
+		bot_move(brd)
+		if bot_is_winner(brd):
+			display_board(brd)
+			print("Ты проиграл!")
+			break
+		if tie(brd):
+			display_board(brd)
+			print("Ничья!")
+			break
+elif BOT_ICON == "X":
+	while True:
+		# Ход бота
+		display_board(brd)
+		bot_move(brd)
+		if bot_is_winner(brd):
+			display_board(brd)
+			print("Ты проиграл!")
+			break
+		if tie(brd):
+			display_board(brd)
+			print("Ничья!")
+			break
+		# Ход Игрока
+		display_board(brd)
+		player_move(brd)
+		if player_is_winner(brd):
+			display_board(brd)
+			print("Ты выиграл!")
+			break
+		if tie(brd):
+			display_board(brd)
+			print("Ничья!")
+			break
