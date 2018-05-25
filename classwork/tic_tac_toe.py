@@ -76,11 +76,60 @@ def player_move(board):
 		if cell in ways:  # Если клетка свободна
 			board[cell] = PLAYER_ICON  # Делаем ход в клетку
 			break
-		
-choose_icon()
+
+
+def tie(board):
+	free_cells = get_legal_moves(board)
+	return (not len(free_cells)) and (not player_is_winner(board)) and (not bot_is_winner(board))
+
+
 brd = init_board()
-display_board(brd)
-bot_move(brd)
-display_board(brd)
-bot_move(brd)
-display_board(brd)
+choose_icon()
+if PLAYER_ICON == "X":
+	while True:
+		# Ход Игрока
+		display_board(brd)
+		player_move(brd)
+		if player_is_winner(brd):
+			display_board(brd)
+			print("Ты выиграл!")
+			break
+		if tie(brd):
+			display_board(brd)
+			print("Ничья!")
+			break
+		# Ход бота
+		display_board(brd)
+		bot_move(brd)
+		if bot_is_winner(brd):
+			display_board(brd)
+			print("Ты проиграл!")
+			break
+		if tie(brd):
+			display_board(brd)
+			print("Ничья!")
+			break
+elif BOT_ICON == "X":
+	while True:
+		# Ход бота
+		display_board(brd)
+		bot_move(brd)
+		if bot_is_winner(brd):
+			display_board(brd)
+			print("Ты проиграл!")
+			break
+		if tie(brd):
+			display_board(brd)
+			print("Ничья!")
+			break
+		# Ход Игрока
+		display_board(brd)
+		player_move(brd)
+		if player_is_winner(brd):
+			display_board(brd)
+			print("Ты выиграл!")
+			break
+		if tie(brd):
+			display_board(brd)
+			print("Ничья!")
+			break
